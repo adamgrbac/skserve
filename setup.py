@@ -15,10 +15,11 @@ setup(name='skserve',
         'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering',
       ],
-      url='',
+      url='https://github.com/adamgrbac/skserve',
       author='Adam Michael Grbac',
       author_email='adam.grbac@gmail.com',
       license='MIT',
       packages=find_packages(),
-      install_requires=['sklearn','flask'],
+      install_requires=['sklearn','flask','pandas'],
+      test_suite="tests.test_all"
       zip_safe=False)
