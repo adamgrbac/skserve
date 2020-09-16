@@ -1,4 +1,5 @@
 from setuptools import setup
+from setuptools import find_packages
 
 with open("README.md","r") as fh:
 	long_description = fh.read()
@@ -18,6 +19,6 @@ setup(name='skserve',
       author='Adam Michael Grbac',
       author_email='adam.grbac@gmail.com',
       license='MIT',
-      packages=setuptools.find_packages(),
+      packages=find_packages(),
       install_requires=['sklearn','flask'],
       zip_safe=False)
