@@ -21,5 +21,4 @@ setup(name='skserve',
       license='MIT',
       packages=find_packages(),
       install_requires=['sklearn','flask','pandas'],
-      test_suite="tests.test_all"
       zip_safe=False)
