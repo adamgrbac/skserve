@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import pandas as pd
 
+
 class ModelServer(Flask):
     def __init__(self,
                  model,
@@ -49,23 +50,24 @@ class ModelServer(Flask):
 
         # Add Default Routes
         
-        ## Index
-        self.add_url_rule('/',view_func=self.hello)
+        # Index
+        self.add_url_rule('/', view_func=self.hello)
         
-        ## Predict
-        self.add_url_rule('/predict',view_func=self.predict, methods=['POST'])
+        # Predict
+        self.add_url_rule('/predict', view_func=self.predict, methods=['POST'])
         
-        ## Predict Probabilities (for Classification)
+        # Predict Probabilities (for Classification)
         if "predict_proba" in dir(model):
-            self.add_url_rule('/predict_proba',view_func=self.predict_proba, methods=['POST'])
+            self.add_url_rule('/predict_proba', view_func=self.predict_proba, methods=['POST'])
             
-        ## Help
-        self.add_url_rule('/help',view_func=self.help)
+        # Help
+        self.add_url_rule('/help', view_func=self.help)
             
         # Register Custom Error Handler
-        self.register_error_handler(404,self.handle_404)
+        self.register_error_handler(404, self.handle_404)
     
-    def hello(self):
+    @staticmethod
+    def hello():
         """Hello!
         
         A simple function that returns a text blurb when the user sends
@@ -87,9 +89,9 @@ class ModelServer(Flask):
 
         # If data dictionary exists, use keys to order columns of POST data
         if self.data_dict is None:
-            df = pd.DataFrame(data,index=[0])
+            df = pd.DataFrame(data, index=[0])
         else:
-            df = pd.DataFrame(data,index=[0],columns=self.data_dict.keys())
+            df = pd.DataFrame(data, index=[0], columns=self.data_dict.keys())
             
         # Pre-process data as required
         pre_data = self.pre_process(df)
@@ -116,9 +118,9 @@ class ModelServer(Flask):
         
         # If data dictionary exists, use keys to order columns of POST data
         if self.data_dict is None:
-            df = pd.DataFrame(data,index=[0])
+            df = pd.DataFrame(data, index=[0])
         else:
-            df = pd.DataFrame(data,index=[0],columns=self.data_dict.keys())
+            df = pd.DataFrame(data, index=[0], columns=self.data_dict.keys())
         
         # Pre-process data as required
         pre_data = self.pre_process(df)
@@ -146,12 +148,13 @@ S     K  K  S     E     R   R V   V E
 SSSSS KKK   SSSSS EEEEE RRRRR V   V EEEEE
     S K  K      S E     R RR   V V  E
 SSSSS K   K SSSSS EEEEE R   R   V   EEEEE"""
-        help_string += """\n\nThis model API can be used to predict outputs (Regression + Classification) or probabilities (Classification).
+        help_string += """\n\nThis model API can be used to predict outputs (Regression + Classification) or\
+probabilities (Classification).
 
 These are accessed by sending a POST request to <host>/predict or <host>/predict_proba respectively."""
         if self.data_dict is not None:
             help_string += "\n\nThe input data should be a JSON object with the following fields:\n\n"
-            for k,v in self.data_dict.items():
+            for k, v in self.data_dict.items():
                 help_string += k + ": " + v + "\n"
         if self.pre_process.__doc__ is not None:
             help_string += "\nThe data sent will be pre-processed using a pre-defined function:\n\n"
@@ -159,11 +162,10 @@ These are accessed by sending a POST request to <host>/predict or <host>/predict
         if self.post_process.__doc__ is not None:
             help_string += "\nThe model results will be post-processed using a pre-defined function:\n\n"
             help_string += self.post_process.__doc__
-        return help_string, 200, {"Content-Type":"text/html"}
-    
-    def handle_404(self,e):
+        return help_string, 200, {"Content-Type": "text/html"}
+
+    def handle_404(self, e):
         """Handle 404
         
         This function constructs a default response to 404 errors"""
         return "Uh-oh... this page doesn't exist!", 404
-        

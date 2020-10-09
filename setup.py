@@ -5,7 +5,7 @@ with open("README.md","r") as fh:
 	long_description = fh.read()
 
 setup(name='skserve',
-      version='0.1',
+      version='0.11',
       description='Flask-derived wrapper to serve sklearn models',
       long_description=long_description,
       long_description_content_type="text/markdown",
